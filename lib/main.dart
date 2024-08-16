@@ -138,17 +138,14 @@ Future<String> checkAndRetrieveTimeMessage() async {
     final docDate = timestamp != null ? DateFormat('yyyy-MM-dd').format(timestamp) : null;
 
     if (docDate == todayDate) {
-      // Document is up-to-date, return the existing message
       return doc.data()?['message'] ?? '';
     } else {
-      // Document is outdated, update it by calling getTimeMessage
       await getTimeMessage(today);
-      return await checkAndRetrieveTimeMessage(); // Recursive call to retrieve the updated message
+      return await checkAndRetrieveTimeMessage();
     }
   } else {
-    // Document doesn't exist, create it by calling getTimeMessage
     await getTimeMessage(today);
-    return await checkAndRetrieveTimeMessage(); // Recursive call to retrieve the newly created message
+    return await checkAndRetrieveTimeMessage();
   }
 }
 class MyHomePage extends StatefulWidget {
@@ -292,7 +289,6 @@ class _MyHomePageState extends State<MyHomePage> {
             .get();
 
         if (querySnapshot.docs.isEmpty) {
-          // Get the highest existing document ID
           final docsSnapshot = await FirebaseFirestore.instance
               .collection('events')
               .doc('complaints')
@@ -307,11 +303,11 @@ class _MyHomePageState extends State<MyHomePage> {
             highestId = int.tryParse(lastDocId) ?? 0;
           }
 
-          // Increment to get the new document ID
-          highestId++;
-          String newDocId = highestId.toString().padLeft(5, '0'); // Format as 00001, 00002, etc.
 
-          // Add the complaint with the new document ID
+          highestId++;
+          String newDocId = highestId.toString().padLeft(5, '0');
+
+
           await FirebaseFirestore.instance
               .collection('events')
               .doc('complaints')
@@ -357,19 +353,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _fetchEventsFromFirestore() async {
     try {
-      // Reference to the Firestore collection
       final eventsCollection =
       FirebaseFirestore.instance.collection('event information');
       final snapshot = await eventsCollection.get();
 
       if (snapshot.docs.isNotEmpty) {
-        // Convert the documents to a list of Event objects
         List<Event> fetchedEvents = snapshot.docs.map((doc) {
-          // Use the document data to create an Event instance
           return Event.fromJson(doc.data(), doc.id);
         }).toList();
 
-        // Filter out events with dates that have already passed
         List<Event> upcomingEvents = fetchedEvents
             .toList();
         List<Event> upcomingEventsPartys = fetchedEvents
@@ -377,7 +369,6 @@ class _MyHomePageState extends State<MyHomePage> {
             .toList();
 
         setState(() {
-          // Separate the events based on their type
           partyEvents = upcomingEventsPartys
               .where((event) => event.type == EventType.party)
               .toList();
@@ -671,53 +662,53 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                     if (showTime.contains(event.type) && getStatusBool(event) == 'open')
                                       FutureBuilder<String>(
-                                        future: timeMessage, // Fetch time message
+                                        future: timeMessage,
                                         builder: (context, snapshot) {
                                           if (snapshot.connectionState == ConnectionState.waiting) {
-                                            return const Text('Loading...'); // Placeholder while loading
+                                            return const Text('Loading...');
                                           } else if (snapshot.hasError) {
-                                            return Text('Error: ${snapshot.error}'); // Error handling
+                                            return Text('Error: ${snapshot.error}');
                                           } else if (snapshot.hasData) {
                                             return Row(
                                               children: [
                                                 RichText(
                                                   text: getStatus(event, isDarkMode),
                                                 ),
-                                                const SizedBox(width: 8.0), // Adjust spacing between RichText and Text
+                                                const SizedBox(width: 8.0),
                                                 Text(
                                                   snapshot.data!,
-                                                  style: TextStyle(color: Colors.yellow[700], fontSize: 10.0), // Adjust style as needed
+                                                  style: TextStyle(color: Colors.yellow[700], fontSize: 10.0),
                                                 ),
                                               ],
                                             );
                                           } else {
-                                            return const SizedBox.shrink(); // Empty widget if no data
+                                            return const SizedBox.shrink();
                                           }
                                         },
                                       ),
                                     if (showTime.contains(event.type) && getStatusBool(event) == 'closed')
                                       FutureBuilder<String>(
-                                        future: timeMessage, // Fetch time message
+                                        future: timeMessage,
                                         builder: (context, snapshot) {
                                           if (snapshot.connectionState == ConnectionState.waiting) {
-                                            return const Text('Loading...'); // Placeholder while loading
+                                            return const Text('Loading...');
                                           } else if (snapshot.hasError) {
-                                            return Text('Error: ${snapshot.error}'); // Error handling
+                                            return Text('Error: ${snapshot.error}');
                                           } else if (snapshot.hasData) {
                                             return Row(
                                               children: [
                                                 RichText(
                                                   text: getStatus(event, isDarkMode),
                                                 ),
-                                                const SizedBox(width: 8.0), // Adjust spacing between RichText and Text
+                                                const SizedBox(width: 8.0),
                                                 Text(
                                                   snapshot.data!,
-                                                  style: TextStyle(color: Colors.yellow[700], fontSize: 10.0), // Adjust style as needed
+                                                  style: TextStyle(color: Colors.yellow[700], fontSize: 10.0),
                                                 ),
                                               ],
                                             );
                                           } else {
-                                            return const SizedBox.shrink(); // Empty widget if no data
+                                            return const SizedBox.shrink();
                                           }
                                         },
                                       ),
@@ -806,53 +797,53 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             if (showTime.contains(event.type) && getStatusBool(event) == 'open')
                               FutureBuilder<String>(
-                                future: timeMessage, // Fetch time message
+                                future: timeMessage,
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState == ConnectionState.waiting) {
-                                    return const Text('Loading...'); // Placeholder while loading
+                                    return const Text('Loading...');
                                   } else if (snapshot.hasError) {
-                                    return Text('Error: ${snapshot.error}'); // Error handling
+                                    return Text('Error: ${snapshot.error}');
                                   } else if (snapshot.hasData) {
                                     return Row(
                                       children: [
                                         RichText(
                                           text: getStatus(event, isDarkMode),
                                         ),
-                                        const SizedBox(width: 8.0), // Adjust spacing between RichText and Text
+                                        const SizedBox(width: 8.0),
                                         Text(
                                           snapshot.data!,
-                                          style: TextStyle(color: Colors.yellow[700], fontSize: 10.0), // Adjust style as needed
+                                          style: TextStyle(color: Colors.yellow[700], fontSize: 10.0),
                                         ),
                                       ],
                                     );
                                   } else {
-                                    return const SizedBox.shrink(); // Empty widget if no data
+                                    return const SizedBox.shrink();
                                   }
                                 },
                               ),
                             if (showTime.contains(event.type) && getStatusBool(event) == 'closed')
                               FutureBuilder<String>(
-                                future: timeMessage, // Fetch time message
+                                future: timeMessage,
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState == ConnectionState.waiting) {
-                                    return const Text('Loading...'); // Placeholder while loading
+                                    return const Text('Loading...');
                                   } else if (snapshot.hasError) {
-                                    return Text('Error: ${snapshot.error}'); // Error handling
+                                    return Text('Error: ${snapshot.error}');
                                   } else if (snapshot.hasData) {
                                     return Row(
                                       children: [
                                         RichText(
                                           text: getStatus(event, isDarkMode),
                                         ),
-                                        const SizedBox(width: 8.0), // Adjust spacing between RichText and Text
+                                        const SizedBox(width: 8.0),
                                         Text(
                                           snapshot.data!,
-                                          style: TextStyle(color: Colors.yellow[700], fontSize: 10.0), // Adjust style as needed
+                                          style: TextStyle(color: Colors.yellow[700], fontSize: 10.0),
                                         ),
                                       ],
                                     );
                                   } else {
-                                    return const SizedBox.shrink(); // Empty widget if no data
+                                    return const SizedBox.shrink();
                                   }
                                 },
                               ),
@@ -949,7 +940,6 @@ class _MyHomePageState extends State<MyHomePage> {
             setState(() {
               isDarkMode = value;
               widget.onThemeChanged(isDarkMode);
-              // You can use a callback or a state management solution here to apply the dark mode to the entire app
             });
           },
         ),

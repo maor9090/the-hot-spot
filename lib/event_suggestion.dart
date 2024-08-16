@@ -93,8 +93,8 @@ class _SuggestLocationPageState extends State<SuggestLocationPage> {
         'openingTime': _openingTimeController.text,
         'closingTime': _closingTimeController.text,
         'timestamp': Timestamp.now(),
-        'userId': userId,  // Store userId for checking submission limits
-        'approved': 0,  // Field that is always 0 and sent to the database
+        'userId': userId,
+        'approved': 0,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(

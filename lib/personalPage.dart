@@ -14,7 +14,7 @@ class EventDetailPage extends StatefulWidget {
   final bool isDarkMode;
   final List<EventType> showTime;
   final timeMessage;
-  EventDetailPage({required this.event,required this.isDarkMode,required this.showTime,required this.timeMessage});
+  const EventDetailPage({super.key, required this.event,required this.isDarkMode,required this.showTime,required this.timeMessage});
 
 
   @override
@@ -27,26 +27,24 @@ class _EventDetailPageState extends State<EventDetailPage> {
   final AuthService _authService = AuthService();
   User? _currentUser;
 
-  // Variables for reviews and pagination
-  List<QueryDocumentSnapshot> _reviews = [];
+  final List<QueryDocumentSnapshot> _reviews = [];
   bool _hasMoreReviews = true;
   bool _isLoading = false;
   DocumentSnapshot? _lastDocument;
   static const int _reviewsPerPage = 10;
 
-  // Variable to hold selected rating filter
   double? _selectedRating;
 
   @override
   void initState() {
     super.initState();
     _getCurrentUser();
-    _fetchReviews(); // Fetch initial reviews
+    _fetchReviews();
   }
 
   Future<void> _getCurrentUser() async {
     _currentUser = FirebaseAuth.instance.currentUser;
-    setState(() {}); // Trigger a rebuild to update the UI
+    setState(() {});
   }
 
   Future<void> _fetchReviews() async {
@@ -61,7 +59,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
           .collection('information')
           .doc(widget.event.eventId)
           .collection('reviews')
-          .orderBy('timestamp', descending: true) // Order by timestamp only
+          .orderBy('timestamp', descending: true)
           .limit(_reviewsPerPage);
 
       if (_lastDocument != null) {
@@ -73,10 +71,10 @@ class _EventDetailPageState extends State<EventDetailPage> {
         _lastDocument = querySnapshot.docs.last;
         _reviews.addAll(querySnapshot.docs);
         if (querySnapshot.docs.length < _reviewsPerPage) {
-          _hasMoreReviews = false; // No more reviews to load
+          _hasMoreReviews = false;
         }
       } else {
-        _hasMoreReviews = false; // No more reviews to load
+        _hasMoreReviews = false;
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -124,7 +122,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
             'review': review,
             'rating': _rating,
             'userId': userId,
-            'userName': userName, // Save the user's name
+            'userName': userName, 
             'timestamp': Timestamp.fromDate(now),
           });
 
@@ -159,14 +157,13 @@ class _EventDetailPageState extends State<EventDetailPage> {
           );
           _reviewController.clear();
           setState(() {
-            _rating = 1.0; // Reset rating after submission
-            _reviews.clear(); // Clear reviews to reload
+            _rating = 1.0; 
+            _reviews.clear(); 
             _lastDocument = null;
             _hasMoreReviews = true;
-            _fetchReviews(); // Fetch updated reviews
+            _fetchReviews(); 
           });
         } else {
-          // User has already submitted a review
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('You have already submitted a review for this event.'),
@@ -207,7 +204,6 @@ class _EventDetailPageState extends State<EventDetailPage> {
           child: ElevatedButton(
             onPressed: () {
               setState(() {
-                // Toggle the selected rating filter
                 _selectedRating = (_selectedRating == rating) ? null : rating.toDouble();
               });
             },
@@ -215,8 +211,8 @@ class _EventDetailPageState extends State<EventDetailPage> {
               backgroundColor: _selectedRating == rating ? Colors.blue : Colors.grey,
             ),
             child: Text(
-              '$rating ${_selectedRating == rating ? '⭐' : ''}', // Show integer rating
-              style: TextStyle(color: Colors.white),
+              '$rating ${_selectedRating == rating ? '⭐' : ''}',  
+              style: const TextStyle(color: Colors.white),
             ),
           ),
         );
@@ -241,12 +237,12 @@ class _EventDetailPageState extends State<EventDetailPage> {
                 children: [
                   Text(
                     widget.event.name,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     'Rating: ${widget.event.rating}/5, ${widget.event.reviewCount} reviews',
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   if (!widget.showTime.contains(widget.event.type))
                     Text(
                       'Date: ${DateFormat('dd/MM/yyyy HH:mm').format(widget.event.date)}',
@@ -254,54 +250,54 @@ class _EventDetailPageState extends State<EventDetailPage> {
                   if (widget.showTime.contains(widget.event.type) &&
                       getStatusBool(widget.event) == 'open')
                     FutureBuilder<String>(
-                      future: widget.timeMessage, // Fetch time message
+                      future: widget.timeMessage,   
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
-                          return Text('Loading...'); // Placeholder while loading
+                          return const Text('Loading...');
                         } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}'); // Error handling
+                          return Text('Error: ${snapshot.error}');     
                         } else if (snapshot.hasData) {
                           return Row(
                             children: [
                               RichText(
                                 text: getStatus(widget.event, widget.isDarkMode),
                               ),
-                              SizedBox(width: 8.0), // Adjust spacing between RichText and Text
+                              const SizedBox(width: 8.0),
                               Text(
                                 snapshot.data!,
-                                style: TextStyle(color: Colors.yellow[700], fontSize: 10.0), // Adjust style as needed
+                                style: TextStyle(color: Colors.yellow[700], fontSize: 10.0),  
                               ),
                             ],
                           );
                         } else {
-                          return SizedBox.shrink(); // Empty widget if no data
+                          return const SizedBox.shrink();
                         }
                       },
                     ),
                   if (widget.showTime.contains(widget.event.type) &&
                       getStatusBool(widget.event) == 'closed')
                     FutureBuilder<String>(
-                      future: widget.timeMessage, // Fetch time message
+                      future: widget.timeMessage,   
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
-                          return Text('Loading...'); // Placeholder while loading
+                          return const Text('Loading...');
                         } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}'); // Error handling
+                          return Text('Error: ${snapshot.error}');     
                         } else if (snapshot.hasData) {
                           return Row(
                             children: [
                               RichText(
                                 text: getStatus(widget.event, widget.isDarkMode),
                               ),
-                              SizedBox(width: 8.0), // Adjust spacing between RichText and Text
+                              const SizedBox(width: 8.0),
                               Text(
                                 snapshot.data!,
-                                style: TextStyle(color: Colors.yellow[700], fontSize: 10.0), // Adjust style as needed
+                                style: TextStyle(color: Colors.yellow[700], fontSize: 10.0),  
                               ),
                             ],
                           );
                         } else {
-                          return SizedBox.shrink(); // Empty widget if no data
+                          return const SizedBox.shrink();
                         }
                       },
                     ),
@@ -328,10 +324,10 @@ class _EventDetailPageState extends State<EventDetailPage> {
                   Text(
                     'description: ${widget.event.description}',
                   ),
-                  SizedBox(height: 16),
-                  _buildRatingFilterButtons(), // Add rating filter buttons
-                  SizedBox(height: 16),
-                  Text('Past Reviews:'),
+                  const SizedBox(height: 16),
+                  _buildRatingFilterButtons(),
+                  const SizedBox(height: 16),
+                  const Text('Past Reviews:'),
                 ],
               ),
             ),
@@ -340,16 +336,16 @@ class _EventDetailPageState extends State<EventDetailPage> {
             delegate: SliverChildBuilderDelegate(
                   (context, index) {
                 if (_filteredReviews.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(16.0),
                       child: Text('No reviews available'),
                     ),
                   );
                 }
 
                 if (index < _filteredReviews.length) {
-                  final review = _filteredReviews[index]; // Use filtered reviews
+                  final review = _filteredReviews[index];
                   return ListTile(
                     title: Text(review['review'] ?? 'No review'),
                     subtitle: Text(
@@ -367,13 +363,13 @@ class _EventDetailPageState extends State<EventDetailPage> {
                     child: ElevatedButton(
                       onPressed: _fetchReviews,
                       child: _isLoading
-                          ? CircularProgressIndicator()
-                          : Text('Show More'),
+                          ? const CircularProgressIndicator()
+                          : const Text('Show More'),
                     ),
                   )
-                      : Center(
+                      : const Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(16.0),
                       child: Text('No more reviews available'),
                     ),
                   );
@@ -382,7 +378,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
               },
               childCount: _filteredReviews.isEmpty
                   ? 1
-                  : _filteredReviews.length + 1, // Include the "Show More" button
+                  : _filteredReviews.length + 1,
             ),
           ),
 
@@ -393,7 +389,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Rate this event:'),
+                  const Text('Rate this event:'),
                   Slider(
                     value: _rating,
                     onChanged: (value) {
@@ -408,12 +404,12 @@ class _EventDetailPageState extends State<EventDetailPage> {
                   ),
                   TextField(
                     controller: _reviewController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Write your review',
                       border: OutlineInputBorder(),
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: _submitReview,
                     child: const Text('Submit Review'),
