@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "697404764378",
+    "firebase_url": "https://event-information-5ba3f-default-rtdb.firebaseio.com",
+    "project_id": "event-information-5ba3f",
+    "storage_bucket": "event-information-5ba3f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:697404764378:android:9168a35c5cf61c348eb5e3",
+        "android_client_info": {
+          "package_name": "com.example.funtimesgame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "697404764378-vr7ftet4iqrh3js5ab520sk2nolem98v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHU9c-U0IJPQCzdrVXjGZSHjVjVPh5WpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "697404764378-vr7ftet4iqrh3js5ab520sk2nolem98v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

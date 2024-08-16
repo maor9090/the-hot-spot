@@ -1,0 +1,5 @@
+<resources>
+    <!-- Define a color for notifications -->
+    <color name="notification_color">#FF4081</color>
+    <!-- Add other color definitions if needed -->
+</resources>
