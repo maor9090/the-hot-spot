@@ -111,7 +111,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Future<void> reviewCheck(BuildContext context) async {
-    CollectionReference eventsRef = FirebaseFirestore.instance.collection('information');
+    CollectionReference eventsRef = FirebaseFirestore.instance.collection('event information');
 
     try {
       // Fetch all event documents
@@ -129,7 +129,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Future<void> reviewCheckForEvent(String eventId, BuildContext context) async {
-    CollectionReference eventsRef = FirebaseFirestore.instance.collection('information');
+    CollectionReference eventsRef = FirebaseFirestore.instance.collection('event information');
     CollectionReference reviewsRef = eventsRef.doc(eventId).collection('reviews');
 
     try {
