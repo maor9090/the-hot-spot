@@ -56,7 +56,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
 
     try {
       Query query = FirebaseFirestore.instance
-          .collection('information')
+          .collection('event information')
           .doc(widget.event.eventId)
           .collection('reviews')
           .orderBy('timestamp', descending: true)
@@ -106,7 +106,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
 
         // Check if the user has already submitted a review
         final reviewQuerySnapshot = await FirebaseFirestore.instance
-            .collection('information')
+            .collection('event information')
             .doc(widget.event.eventId)
             .collection('reviews')
             .where('userId', isEqualTo: userId)
@@ -115,7 +115,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
         if (reviewQuerySnapshot.docs.isEmpty) {
           // No existing review, proceed with submission
           await FirebaseFirestore.instance
-              .collection('information')
+              .collection('event information')
               .doc(widget.event.eventId)
               .collection('reviews')
               .add({
@@ -127,7 +127,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
           });
 
           // Update review count and average rating
-          final eventDoc = FirebaseFirestore.instance.collection('information').doc(widget.event.eventId);
+          final eventDoc = FirebaseFirestore.instance.collection('event information').doc(widget.event.eventId);
           await FirebaseFirestore.instance.runTransaction((transaction) async {
             final snapshot = await transaction.get(eventDoc);
             if (!snapshot.exists) {
